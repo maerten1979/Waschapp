@@ -1,195 +1,15 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Waschprogramme</title>
-
-<style>
-
-body{
-font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-background:#f2f2f7;
-padding:15px;
-margin:0;
-}
-
-h1{
-text-align:center;
-font-size:32px;
-}
-
-.card{
-background:white;
-padding:15px;
-margin-bottom:15px;
-border-radius:20px;
-box-shadow:0 2px 10px rgba(0,0,0,0.08);
-}
-
-input,select,textarea{
-width:100%;
-padding:14px;
-margin-bottom:10px;
-border:none;
-background:#f2f2f7;
-border-radius:12px;
-font-size:16px;
-box-sizing:border-box;
-}
-
-button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-background:#007AFF;
-color:white;
-font-size:16px;
-font-weight:bold;
-}
-
-.item{
-background:white;
-padding:15px;
-border-radius:20px;
-margin-bottom:15px;
-box-shadow:0 2px 10px rgba(0,0,0,0.08);
-}
-
-.item img{
-width:100%;
-max-height:250px;
-object-fit:cover;
-border-radius:15px;
-margin-bottom:10px;
-}
-
-.badge{
-display:inline-block;
-padding:6px 12px;
-background:#007AFF;
-color:white;
-border-radius:20px;
-font-size:13px;
-margin-bottom:10px;
-}
-
-.name{
-font-size:22px;
-font-weight:bold;
-margin-bottom:10px;
-}
-
-.delete{
-background:#ff3b30;
-margin-top:10px;
-}
-
-.favorite{
-background:#ffcc00;
-color:black;
-margin-bottom:10px;
-}
-
-@media (prefers-color-scheme: dark){
-
-body{
-background:black;
-color:white;
-}
-
-.card,
-.item{
-background:#1c1c1e;
-}
-
-input,
-select,
-textarea{
-background:#2c2c2e;
-color:white;
-}
-}
-
-</style>
-</head>
-
-<body>
-
-<h1>🧺 Waschprogrammeeeee</h1>
-
-<div class="card">
-
-<input
-id="suche"
-placeholder="🔍 Suchen..."
-onkeyup="anzeigen()">
-
-</div>
-
-<div class="card">
-
-<input
-id="name"
-placeholder="Wäschestück">
-
-<select id="kategorie">
-
-<option>T-Shirts</option>
-<option>Hemden</option>
-<option>Hosen</option>
-<option>Jacken</option>
-<option>Pullover</option>
-<option>Unterwäsche</option>
-<option>Socken</option>
-<option>Sportbekleidung</option>
-<option>Handtücher</option>
-<option>Bettwäsche</option>
-<option>Sonstiges</option>
-
-</select>
-
-<select id="programm" onchange="temperaturVorschlag()">
-
-<option>Baumwolle 60°C</option>
-<option>Baumwolle 40°C</option>
-<option>Pflegeleicht 40°C</option>
-<option>Pflegeleicht 30°C</option>
-<option>Feinwäsche</option>
-<option>Wolle</option>
-<option>Handwäsche</option>
-<option>Sportwäsche</option>
-
-</select>
-
-<input
-id="temperatur"
-placeholder="Temperatur">
-
-<textarea
-id="hinweis"
-placeholder="Hinweise"></textarea>
-
-<input
-type="file"
-id="bild"
-accept="image/*"
-capture="environment">
-
-<button onclick="speichern()">
-Speichern
-</button>
-
-</div>
-
-<div id="liste"></div>
-
 <script>
 
-let waescheListe =
-JSON.parse(localStorage.getItem("waescheListe")) || [];
+let waescheListe = [];
+
+try {
+    waescheListe =
+    JSON.parse(localStorage.getItem("waescheListe")) || [];
+}
+catch(e){
+    localStorage.removeItem("waescheListe");
+    waescheListe = [];
+}
 
 temperaturVorschlag();
 anzeigen();
@@ -203,13 +23,14 @@ const temp =
 document.getElementById("temperatur");
 
 if(programm.includes("60"))
-temp.value="60°C";
+temp.value = "60°C";
 
 else if(programm.includes("40"))
-temp.value="40°C";
+temp.value = "40°C";
 
 else
-temp.value="30°C";
+temp.value = "30°C";
+
 }
 
 function getIcon(kategorie){
@@ -241,6 +62,7 @@ default:
 return "🧺";
 
 }
+
 }
 
 function speichern(){
@@ -266,7 +88,9 @@ reader.readAsDataURL(file);
 else{
 
 eintragSpeichern("");
+
 }
+
 }
 
 function eintragSpeichern(bild){
@@ -274,7 +98,7 @@ function eintragSpeichern(bild){
 const teil = {
 
 name:
-document.getElementById("name").value,
+document.getElementById("name").value.trim(),
 
 kategorie:
 document.getElementById("kategorie").value,
@@ -288,11 +112,20 @@ document.getElementById("temperatur").value,
 hinweis:
 document.getElementById("hinweis").value,
 
-bild:bild,
+bild:
+bild,
 
-favorit:false
+favorit:
+false
 
 };
+
+if(teil.name === ""){
+
+alert("Bitte Wäschestück eingeben");
+return;
+
+}
 
 waescheListe.push(teil);
 
@@ -301,11 +134,12 @@ localStorage.setItem(
 JSON.stringify(waescheListe)
 );
 
-document.getElementById("name").value="";
-document.getElementById("hinweis").value="";
-document.getElementById("bild").value="";
+document.getElementById("name").value = "";
+document.getElementById("hinweis").value = "";
+document.getElementById("bild").value = "";
 
 anzeigen();
+
 }
 
 function favorit(index){
@@ -319,110 +153,9 @@ JSON.stringify(waescheListe)
 );
 
 anzeigen();
+
 }
 
 function loeschen(index){
 
-if(confirm("Eintrag löschen?")){
-
-waescheListe.splice(index,1);
-
-localStorage.setItem(
-"waescheListe",
-JSON.stringify(waescheListe)
-);
-
-anzeigen();
-}
-}
-
-function anzeigen(){
-
-const suche =
-document.getElementById("suche")
-.value.toLowerCase();
-
-const liste =
-document.getElementById("liste");
-
-liste.innerHTML="";
-
-waescheListe
-.sort((a,b)=>b.favorit-a.favorit)
-.filter(teil=>
-
-teil.name
-.toLowerCase()
-.includes(suche)
-
-||
-
-teil.kategorie
-.toLowerCase()
-.includes(suche)
-
-||
-
-teil.programm
-.toLowerCase()
-.includes(suche)
-
-)
-
-.forEach((teil,index)=>{
-
-liste.innerHTML += `
-
-<div class="item">
-
-${teil.bild ?
-`<img src="${teil.bild}">`
-:
-''
-}
-
-<div class="badge">
-${teil.kategorie}
-</div>
-
-<div class="name">
-${getIcon(teil.kategorie)}
-${teil.name}
-</div>
-
-<div>
-⭐ ${teil.favorit ? "Favorit" : ""}
-</div>
-
-<p><b>Programm:</b> ${teil.programm}</p>
-<p><b>Temperatur:</b> ${teil.temperatur}</p>
-<p><b>Hinweis:</b> ${teil.hinweis}</p>
-
-<button
-class="favorite"
-onclick="favorit(${index})">
-
-⭐ Favorit umschalten
-
-</button>
-
-<button
-class="delete"
-onclick="loeschen(${index})">
-
-🗑 Löschen
-
-</button>
-
-</div>
-
-`;
-
-});
-
-}
-
-</script>
-
-</body>
-</html>
+if(confirm("Eintrag l
