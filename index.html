@@ -4,71 +4,151 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Waschprogramme</title>
+<title>🧺 Waschprogramme</title>
 
 <style>
 
 body{
-font-family:Arial,sans-serif;
-background:#f2f2f2;
-max-width:800px;
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+background:#f2f2f7;
+margin:0;
+padding:15px;
+max-width:900px;
 margin:auto;
-padding:20px;
 }
 
 h1{
 text-align:center;
+font-size:32px;
+margin-bottom:20px;
 }
 
 .card{
 background:white;
 padding:15px;
-border-radius:10px;
 margin-bottom:15px;
+border-radius:20px;
+box-shadow:0 2px 10px rgba(0,0,0,0.08);
 }
 
-input,select,textarea,button{
+input,select,textarea{
 width:100%;
-padding:10px;
-margin:5px 0;
+padding:14px;
+margin-bottom:10px;
+border:none;
+border-radius:12px;
+background:#f2f2f7;
+font-size:16px;
 box-sizing:border-box;
 }
 
 button{
-background:#007AFF;
-color:white;
+width:100%;
+padding:14px;
 border:none;
+border-radius:12px;
+font-size:16px;
+font-weight:bold;
 cursor:pointer;
 }
 
-.listeEintrag{
-background:white;
-padding:15px;
-margin-bottom:10px;
-border-radius:10px;
+.speichern{
+background:#007AFF;
+color:white;
 }
 
 .favorit{
-background:gold;
+background:#FFD60A;
 color:black;
+margin-top:10px;
 }
 
 .loeschen{
-background:red;
+background:#FF3B30;
 color:white;
+margin-top:10px;
+}
+
+.item{
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:20px;
+box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.badge{
+display:inline-block;
+padding:6px 12px;
+background:#007AFF;
+color:white;
+border-radius:20px;
+font-size:13px;
+margin-bottom:10px;
+}
+
+.name{
+font-size:22px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+@media (prefers-color-scheme: dark){
+
+body{
+background:#000;
+color:white;
+}
+
+.card,
+.item{
+background:#1c1c1e;
+}
+
+input,
+select,
+textarea{
+background:#2c2c2e;
+color:white;
+}
+
 }
 
 </style>
 </head>
+
 <body>
 
 <h1>🧺 Waschprogramme</h1>
 
 <div class="card">
 
-<input id="suche" placeholder="Suche..." onkeyup="anzeigen()">
+<input
+id="suche"
+placeholder="🔍 Suchen..."
+onkeyup="anzeigen()">
 
-<input id="name" placeholder="Wäschestück">
+</div>
+
+<div class="card">
+
+<input
+id="name"
+placeholder="Wäschestück">
+
+<select id="kategorie">
+<option>T-Shirts</option>
+<option>Hemden</option>
+<option>Hosen</option>
+<option>Jacken</option>
+<option>Pullover</option>
+<option>Unterwäsche</option>
+<option>Socken</option>
+<option>Sportbekleidung</option>
+<option>Handtücher</option>
+<option>Bettwäsche</option>
+<option>Sonstiges</option>
+</select>
 
 <select id="programm">
 <option>Baumwolle 60°C</option>
@@ -77,11 +157,17 @@ color:white;
 <option>Pflegeleicht 30°C</option>
 <option>Feinwäsche</option>
 <option>Wolle</option>
+<option>Handwäsche</option>
+<option>Sportwäsche</option>
 </select>
 
-<textarea id="hinweis" placeholder="Hinweis"></textarea>
+<textarea
+id="hinweis"
+placeholder="Hinweis"></textarea>
 
-<button onclick="speichern()">
+<button
+class="speichern"
+onclick="speichern()">
 Speichern
 </button>
 
@@ -96,19 +182,54 @@ JSON.parse(localStorage.getItem("waesche")) || [];
 
 anzeigen();
 
+function icon(kategorie){
+
+switch(kategorie){
+
+case "T-Shirts":
+return "👕";
+
+case "Hemden":
+return "👔";
+
+case "Hosen":
+return "👖";
+
+case "Jacken":
+return "🧥";
+
+case "Sportbekleidung":
+return "🏃";
+
+case "Bettwäsche":
+return "🛏️";
+
+case "Handtücher":
+return "🧺";
+
+default:
+return "📦";
+
+}
+
+}
+
 function speichern(){
 
 const name =
 document.getElementById("name").value.trim();
 
 if(name===""){
+
 alert("Bitte Wäschestück eingeben");
 return;
+
 }
 
 daten.push({
 
 name:name,
+kategorie:document.getElementById("kategorie").value,
 programm:document.getElementById("programm").value,
 hinweis:document.getElementById("hinweis").value,
 favorit:false
@@ -169,35 +290,54 @@ document.getElementById("liste");
 
 liste.innerHTML="";
 
-daten.forEach((eintrag,index)=>{
+const sortiert =
+[...daten].sort(
+(a,b)=>Number(b.favorit)-Number(a.favorit)
+);
+
+sortiert.forEach(eintrag=>{
 
 if(
 !eintrag.name.toLowerCase().includes(suche)
+&&
+!eintrag.kategorie.toLowerCase().includes(suche)
 &&
 !eintrag.programm.toLowerCase().includes(suche)
 ){
 return;
 }
 
+const index =
+daten.indexOf(eintrag);
+
 liste.innerHTML += `
 
-<div class="listeEintrag">
+<div class="item">
 
-<h3>${eintrag.name}</h3>
+<div class="badge">
+${eintrag.kategorie}
+</div>
+
+<div class="name">
+${icon(eintrag.kategorie)}
+${eintrag.name}
+</div>
+
+<div>
+${eintrag.favorit ? "⭐ Favorit" : ""}
+</div>
 
 <p><b>Programm:</b> ${eintrag.programm}</p>
 
-<p>${eintrag.hinweis}</p>
+<p><b>Hinweis:</b> ${eintrag.hinweis}</p>
 
 <button
 class="favorit"
 onclick="favorit(${index})">
 
-${eintrag.favorit ? "⭐ Favorit" : "☆ Favorit"}
+⭐ Favorit
 
 </button>
-
-<br><br>
 
 <button
 class="loeschen"
