@@ -273,15 +273,16 @@ anzeigen();
 
 function setFilter(kategorie){
 
-filterKategorie = kategorie;
-anzeigen();
+    filterKategorie = kategorie;
+    anzeigen();
+
+}
 
 function setBesitzer(name){
 
-filterBesitzer = name;
-anzeigen();
+    filterBesitzer = name;
+    anzeigen();
 
-}
 }
 
 function temperaturVorschlag(){
@@ -335,7 +336,7 @@ const eintrag = {
 
 name:name.value,
 kategorie:kategorie.value,
-besitzer:besitzer.value,
+besitzer: document.getElementById("besitzer").value,
 programm:programm.value,
 temperatur:temperatur.value,
 trockner:trockner.value,
@@ -404,8 +405,7 @@ waescheListe[index];
 
 name.value = teil.name;
 kategorie.value = teil.kategorie;
-besitzer.value = teil.besitzer;
-programm.value = teil.programm;
+document.getElementById("besitzer").value = teil.besitzer;programm.value = teil.programm;
 temperatur.value = teil.temperatur;
 trockner.value = teil.trockner;
 hinweis.value = teil.hinweis;
