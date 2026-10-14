@@ -333,10 +333,25 @@ speichernDaten();
 
 function speichernDaten(){
 
+try {
+
 localStorage.setItem(
 "waesche",
 JSON.stringify(daten)
 );
+
+alert("Gespeichert");
+
+anzeigen();
+
+}
+catch(error){
+
+alert("Speichern fehlgeschlagen: " + error);
+
+}
+
+}
 
 document.getElementById("bezeichnung").value="";
 document.getElementById("name").selectedIndex=0;
