@@ -95,6 +95,14 @@ font-weight:bold;
 margin-bottom:10px;
 }
 
+.bild{
+width:100%;
+max-height:250px;
+object-fit:cover;
+border-radius:15px;
+margin-bottom:10px;
+}
+
 @media (prefers-color-scheme: dark){
 
 body{
@@ -133,9 +141,11 @@ onkeyup="anzeigen()">
 </div>
 
 <div class="card">
+
 <input
 id="bezeichnung"
 placeholder="Bezeichnung (z.B. Martins Lieblingshoodie)">
+
 <input
 id="name"
 list="waescheVorschlaege"
@@ -180,6 +190,12 @@ placeholder="Wäschestück">
 <option>Trockner nicht geeignet</option>
 </select>
 
+<input
+type="file"
+id="bild"
+accept="image/*"
+capture="environment">
+
 <textarea
 id="hinweis"
 placeholder="Hinweis"></textarea>
@@ -213,23 +229,85 @@ return;
 
 }
 
+const file =
+document.getElementById("bild").files[0];
+
+if(file){
+
+const reader = new FileReader();
+
+reader.onload = function(e){
+
 daten.push({
 
+bezeichnung:
+document.getElementById("bezeichnung").value,
+
 name:name,
-programm:document.getElementById("programm").value,
-trockner:document.getElementById("trockner").value,
-hinweis:document.getElementById("hinweis").value,
+
+programm:
+document.getElementById("programm").value,
+
+trockner:
+document.getElementById("trockner").value,
+
+hinweis:
+document.getElementById("hinweis").value,
+
+bild:e.target.result,
+
 favorit:false
 
 });
+
+speichernDaten();
+
+};
+
+reader.readAsDataURL(file);
+
+}
+else{
+
+daten.push({
+
+bezeichnung:
+document.getElementById("bezeichnung").value,
+
+name:name,
+
+programm:
+document.getElementById("programm").value,
+
+trockner:
+document.getElementById("trockner").value,
+
+hinweis:
+document.getElementById("hinweis").value,
+
+bild:"",
+
+favorit:false
+
+});
+
+speichernDaten();
+
+}
+
+}
+
+function speichernDaten(){
 
 localStorage.setItem(
 "waesche",
 JSON.stringify(daten)
 );
 
+document.getElementById("bezeichnung").value="";
 document.getElementById("name").value="";
 document.getElementById("hinweis").value="";
+document.getElementById("bild").value="";
 document.getElementById("programm").selectedIndex=0;
 document.getElementById("trockner").selectedIndex=0;
 
@@ -290,6 +368,8 @@ if(
 !eintrag.name.toLowerCase().includes(suche)
 &&
 !eintrag.programm.toLowerCase().includes(suche)
+&&
+!(eintrag.bezeichnung || "").toLowerCase().includes(suche)
 ){
 return;
 }
@@ -301,17 +381,20 @@ liste.innerHTML += `
 
 <div class="item">
 
+${eintrag.bild ?
+`<img class="bild" src="${eintrag.bild}">`
+: ""
+}
+
 <div class="badge">
-${eintrag.trockner === "Ja" ? "🌬️ Trockner" : "🚫 Kein Trockner"}
+${eintrag.trockner}
 </div>
 
 <div class="name">
 🧺 ${eintrag.name}
 </div>
 
-<div>
-${eintrag.favorit ? "⭐ Favorit" : ""}
-</div>
+<p><b>Bezeichnung:</b> ${eintrag.bezeichnung || "-"}</p>
 
 <p><b>Programm:</b> ${eintrag.programm}</p>
 
@@ -319,11 +402,15 @@ ${eintrag.favorit ? "⭐ Favorit" : ""}
 
 <p><b>Hinweis:</b> ${eintrag.hinweis}</p>
 
+<div>
+${eintrag.favorit ? "⭐ Favorit" : ""}
+</div>
+
 <button
 class="favorit"
 onclick="favorit(${index})">
 
-⭐ Favorit
+⭐ Favorit umschalten
 
 </button>
 
@@ -347,3 +434,4 @@ onclick="loeschen(${index})">
 
 </body>
 </html>
+``
