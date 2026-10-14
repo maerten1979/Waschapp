@@ -275,14 +275,11 @@ function setFilter(kategorie){
 
     filterKategorie = kategorie;
     anzeigen();
-
 }
 
 function setBesitzer(name){
-
     filterBesitzer = name;
     anzeigen();
-
 }
 
 function temperaturVorschlag(){
@@ -334,15 +331,15 @@ function eintragSpeichern(bild){
 
 const eintrag = {
 
-name:name.value,
-kategorie:kategorie.value,
+name: document.getElementById("name").value,
+kategorie: document.getElementById("kategorie").value,
 besitzer: document.getElementById("besitzer").value,
-programm:programm.value,
-temperatur:temperatur.value,
-trockner:trockner.value,
-hinweis:hinweis.value,
-bild:bild,
-favorit:false
+programm: document.getElementById("programm").value,
+temperatur: document.getElementById("temperatur").value,
+trockner: document.getElementById("trockner").value,
+hinweis: document.getElementById("hinweis").value,
+bild: bild,
+favorit: false
 
 };
 
