@@ -213,7 +213,7 @@ placeholder="Bezeichnung (z.B. Martins Lieblingshoodie)">
 
 <input
 type="file"
-id="bild"
+id="bild">
 
 
 <textarea
@@ -344,14 +344,11 @@ JSON.stringify(daten)
 
 alert("Gespeichert");
 
-anzeigen();
-
 }
 catch(error){
 
 alert("Speichern fehlgeschlagen: " + error);
-
-}
+return;
 
 }
 
@@ -367,6 +364,7 @@ document.getElementById("trockner").selectedIndex=0;
 anzeigen();
 
 }
+
 
 function favorit(index){
 
