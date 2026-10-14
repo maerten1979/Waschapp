@@ -154,13 +154,7 @@ onkeyup="anzeigen()">
 <button onclick="setFilter('Sport')">🏃</button>
 <button onclick="setFilter('Bettwäsche')">🛏️</button>
 </div>
-<div class="filter">
-<button onclick="setBesitzer('')">Alle Personen</button>
-<button onclick="setBesitzer('Martin')">Martin</button>
-<button onclick="setBesitzer('Verena')">Verena</button>
-<button onclick="setBesitzer('Paula')">Paula</button>
-<button onclick="setBesitzer('Marlen')">Marlen</button>
-</div>
+
 <div class="card">
 
 <input
@@ -179,14 +173,6 @@ placeholder="Wäschestück">
 <option>Bettwäsche</option>
 <option>Handtücher</option>
 <option>Sonstiges</option>
-
-</select>
-<select id="besitzer">
-
-<option>Martin</option>
-<option>Verena</option>
-<option>Paula</option>
-<option>Marlen</option>
 
 </select>
 
@@ -260,7 +246,6 @@ onclick="speichern()">
 <script>
 
 let filterKategorie = "";
-let filterBesitzer = "";
 let bearbeitenIndex = -1;
 
 let waescheListe =
@@ -273,13 +258,9 @@ anzeigen();
 
 function setFilter(kategorie){
 
-    filterKategorie = kategorie;
-    anzeigen();
-}
+filterKategorie = kategorie;
+anzeigen();
 
-function setBesitzer(name){
-    filterBesitzer = name;
-    anzeigen();
 }
 
 function temperaturVorschlag(){
@@ -331,18 +312,16 @@ function eintragSpeichern(bild){
 
 const eintrag = {
 
-name: document.getElementById("name").value,
-kategorie: document.getElementById("kategorie").value,
-besitzer: document.getElementById("besitzer").value,
-programm: document.getElementById("programm").value,
-temperatur: document.getElementById("temperatur").value,
-trockner: document.getElementById("trockner").value,
-hinweis: document.getElementById("hinweis").value,
-bild: bild,
-favorit: false
+name:name.value,
+kategorie:kategorie.value,
+programm:programm.value,
+temperatur:temperatur.value,
+trockner:trockner.value,
+hinweis:hinweis.value,
+bild:bild,
+favorit:false
 
 };
-
 
 if(bearbeitenIndex >= 0){
 
@@ -402,7 +381,7 @@ waescheListe[index];
 
 name.value = teil.name;
 kategorie.value = teil.kategorie;
-document.getElementById("besitzer").value = teil.besitzer;programm.value = teil.programm;
+programm.value = teil.programm;
 temperatur.value = teil.temperatur;
 trockner.value = teil.trockner;
 hinweis.value = teil.hinweis;
@@ -472,15 +451,8 @@ const passtKategorie =
 filterKategorie === ""
 ||
 item.kategorie === filterKategorie;
-const passtBesitzer =
 
-filterBesitzer === ""
-||
-item.besitzer === filterBesitzer;
-
-return passtSuche
-&& passtKategorie
-&& passtBesitzer;
+return passtSuche && passtKategorie;
 
 })
 
@@ -500,8 +472,6 @@ ${teil.bild
 <div class="badge">
 ${teil.kategorie}
 </div>
-
-<p><b>👤 Besitzer:</b> ${teil.besitzer}</p>
 
 <h2>
 ${getIcon(teil.kategorie)}
