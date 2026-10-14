@@ -31,7 +31,9 @@ border-radius:20px;
 box-shadow:0 2px 10px rgba(0,0,0,0.08);
 }
 
-input,select,textarea{
+input,
+select,
+textarea{
 width:100%;
 padding:14px;
 margin-bottom:10px;
@@ -160,6 +162,22 @@ placeholder="Wäschestück">
 
 </datalist>
 
+<select id="programm">
+<option>Baumwolle 60°C</option>
+<option>Baumwolle 40°C</option>
+<option>Pflegeleicht 40°C</option>
+<option>Pflegeleicht 30°C</option>
+<option>Feinwäsche</option>
+<option>Wolle</option>
+<option>Handwäsche</option>
+<option>Sportwäsche</option>
+</select>
+
+<select id="trockner">
+<option>Ja</option>
+<option>Nein</option>
+</select>
+
 <textarea
 id="hinweis"
 placeholder="Hinweis"></textarea>
@@ -181,38 +199,6 @@ JSON.parse(localStorage.getItem("waesche")) || [];
 
 anzeigen();
 
-function icon(kategorie){
-
-switch(kategorie){
-
-case "T-Shirts":
-return "👕";
-
-case "Hemden":
-return "👔";
-
-case "Hosen":
-return "👖";
-
-case "Jacken":
-return "🧥";
-
-case "Sportbekleidung":
-return "🏃";
-
-case "Bettwäsche":
-return "🛏️";
-
-case "Handtücher":
-return "🧺";
-
-default:
-return "📦";
-
-}
-
-}
-
 function speichern(){
 
 const name =
@@ -228,8 +214,8 @@ return;
 daten.push({
 
 name:name,
-kategorie:document.getElementById("kategorie").value,
 programm:document.getElementById("programm").value,
+trockner:document.getElementById("trockner").value,
 hinweis:document.getElementById("hinweis").value,
 favorit:false
 
@@ -242,6 +228,8 @@ JSON.stringify(daten)
 
 document.getElementById("name").value="";
 document.getElementById("hinweis").value="";
+document.getElementById("programm").selectedIndex=0;
+document.getElementById("trockner").selectedIndex=0;
 
 anzeigen();
 
@@ -299,8 +287,6 @@ sortiert.forEach(eintrag=>{
 if(
 !eintrag.name.toLowerCase().includes(suche)
 &&
-!eintrag.kategorie.toLowerCase().includes(suche)
-&&
 !eintrag.programm.toLowerCase().includes(suche)
 ){
 return;
@@ -314,12 +300,11 @@ liste.innerHTML += `
 <div class="item">
 
 <div class="badge">
-${eintrag.kategorie}
+${eintrag.trockner === "Ja" ? "🌬️ Trockner" : "🚫 Kein Trockner"}
 </div>
 
 <div class="name">
-${icon(eintrag.kategorie)}
-${eintrag.name}
+🧺 ${eintrag.name}
 </div>
 
 <div>
@@ -327,6 +312,8 @@ ${eintrag.favorit ? "⭐ Favorit" : ""}
 </div>
 
 <p><b>Programm:</b> ${eintrag.programm}</p>
+
+<p><b>Trockner:</b> ${eintrag.trockner}</p>
 
 <p><b>Hinweis:</b> ${eintrag.hinweis}</p>
 
