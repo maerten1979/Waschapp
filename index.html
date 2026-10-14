@@ -312,4 +312,221 @@ function eintragSpeichern(bild){
 
 const eintrag = {
 
-name:name.value
+name:name.value,
+kategorie:kategorie.value,
+programm:programm.value,
+temperatur:temperatur.value,
+trockner:trockner.value,
+hinweis:hinweis.value,
+bild:bild,
+favorit:false
+
+};
+
+if(bearbeitenIndex >= 0){
+
+eintrag.favorit =
+waescheListe[bearbeitenIndex].favorit;
+
+if(!bild){
+
+eintrag.bild =
+waescheListe[bearbeitenIndex].bild;
+
+}
+
+waescheListe[bearbeitenIndex] = eintrag;
+
+bearbeitenIndex = -1;
+
+}
+else{
+
+waescheListe.push(eintrag);
+
+}
+
+speichernStorage();
+
+name.value="";
+hinweis.value="";
+bild.value="";
+
+}
+
+function speichernStorage(){
+
+localStorage.setItem(
+"waescheListe",
+JSON.stringify(waescheListe)
+);
+
+anzeigen();
+
+}
+
+function favorit(index){
+
+waescheListe[index].favorit =
+!waescheListe[index].favorit;
+
+speichernStorage();
+
+}
+
+function bearbeiten(index){
+
+const teil =
+waescheListe[index];
+
+name.value = teil.name;
+kategorie.value = teil.kategorie;
+programm.value = teil.programm;
+temperatur.value = teil.temperatur;
+trockner.value = teil.trockner;
+hinweis.value = teil.hinweis;
+
+bearbeitenIndex = index;
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+function loeschen(index){
+
+if(confirm("Eintrag löschen?")){
+
+waescheListe.splice(index,1);
+
+speichernStorage();
+
+}
+
+}
+
+function getIcon(k){
+
+if(k==="T-Shirts") return "👕";
+if(k==="Hosen") return "👖";
+if(k==="Jacken") return "🧥";
+if(k==="Sport") return "🏃";
+if(k==="Bettwäsche") return "🛏️";
+if(k==="Handtücher") return "🛁";
+
+return "🧺";
+
+}
+
+function anzeigen(){
+
+const suche =
+document.getElementById("suche")
+.value
+.toLowerCase();
+
+const liste =
+document.getElementById("liste");
+
+liste.innerHTML="";
+
+waescheListe
+
+.sort((a,b)=>b.favorit-a.favorit)
+
+.filter(item=>{
+
+const passtSuche =
+
+item.name.toLowerCase().includes(suche)
+||
+item.programm.toLowerCase().includes(suche)
+||
+item.kategorie.toLowerCase().includes(suche);
+
+const passtKategorie =
+
+filterKategorie === ""
+||
+item.kategorie === filterKategorie;
+
+return passtSuche && passtKategorie;
+
+})
+
+.forEach((teil,index)=>{
+
+liste.innerHTML += `
+
+<div class="item">
+
+${teil.bild
+?
+`<img src="${teil.bild}">`
+:
+''
+}
+
+<div class="badge">
+${teil.kategorie}
+</div>
+
+<h2>
+${getIcon(teil.kategorie)}
+${teil.name}
+</h2>
+
+<p><b>🧺 Programm:</b> ${teil.programm}</p>
+
+<p><b>🌡 Temperatur:</b> ${teil.temperatur}</p>
+
+<p><b>🌀 Trockner:</b>
+${teil.trockner === "Ja"
+? "✅ Trocknergeeignet"
+: "❌ Nicht trocknergeeignet"}
+</p>
+
+<p><b>📝 Hinweis:</b> ${teil.hinweis}</p>
+
+<p>
+${teil.favorit ? "⭐ Favorit" : ""}
+</p>
+
+<button
+class="favorite"
+onclick="favorit(${index})">
+
+⭐ Favorit
+
+</button>
+
+<button
+class="edit"
+onclick="bearbeiten(${index})">
+
+✏️ Bearbeiten
+
+</button>
+
+<button
+class="delete"
+onclick="loeschen(${index})">
+
+🗑 Löschen
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
