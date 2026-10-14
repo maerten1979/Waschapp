@@ -269,16 +269,16 @@ const programm =
 document.getElementById("programm").value;
 
 if(programm.includes("90"))
-temperatur.value = "90°C";
+document.getElementById("temperatur").value = "90°C";
 
 else if(programm.includes("60"))
-temperatur.value = "60°C";
+document.getElementById("temperatur").value = "60°C";
 
 else if(programm.includes("40"))
-temperatur.value = "40°C";
+document.getElementById("temperatur").value = "40°C";
 
 else
-temperatur.value = "30°C";
+document.getElementById("temperatur").value = "30°C";
 
 }
 
@@ -312,14 +312,14 @@ function eintragSpeichern(bild){
 
 const eintrag = {
 
-name:name.value,
-kategorie:kategorie.value,
-programm:programm.value,
-temperatur:temperatur.value,
-trockner:trockner.value,
-hinweis:hinweis.value,
-bild:bild,
-favorit:false
+name: document.getElementById("name").value,
+kategorie: document.getElementById("kategorie").value,
+programm: document.getElementById("programm").value,
+temperatur: document.getElementById("temperatur").value,
+trockner: document.getElementById("trockner").value,
+hinweis: document.getElementById("hinweis").value,
+bild: bild,
+favorit: false
 
 };
 
@@ -347,6 +347,12 @@ waescheListe.push(eintrag);
 }
 
 speichernStorage();
+
+document.getElementById("name").value = "";
+document.getElementById("hinweis").value = "";
+document.getElementById("bild").value = "";
+
+}
 
 name.value="";
 hinweis.value="";
@@ -379,12 +385,12 @@ function bearbeiten(index){
 const teil =
 waescheListe[index];
 
-name.value = teil.name;
-kategorie.value = teil.kategorie;
-programm.value = teil.programm;
-temperatur.value = teil.temperatur;
-trockner.value = teil.trockner;
-hinweis.value = teil.hinweis;
+document.getElementById("name").value = teil.name;
+document.getElementById("kategorie").value = teil.kategorie;
+document.getElementById("programm").value = teil.programm;
+document.getElementById("temperatur").value = teil.temperatur;
+document.getElementById("trockner").value = teil.trockner;
+document.getElementById("hinweis").value = teil.hinweis;
 
 bearbeitenIndex = index;
 
