@@ -129,7 +129,10 @@ color:white;
 
 <body>
 
-<h1>🧺 Waschprogramme</h1>
+<h1>
+🧺 Waschprogramme<br>
+❤️❤️ 🐰🐰🐰🐰 ❤️❤️
+</h1>
 
 <div class="card">
 
@@ -239,7 +242,6 @@ anzeigen();
 
 function speichern(){
 
-alert("Speichern wurde gestartet");
 
 const name =
 document.getElementById("name").value;
@@ -260,7 +262,6 @@ const reader = new FileReader();
 
 reader.onload = function(e){
 
-alert("Bild wurde geladen");
 
 daten.push({
 
@@ -342,7 +343,6 @@ localStorage.setItem(
 JSON.stringify(daten)
 );
 
-alert("Gespeichert");
 
 }
 catch(error){
