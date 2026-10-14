@@ -2,49 +2,41 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Waschprogramme</title>
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
 body{
 font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 background:#f2f2f7;
 padding:15px;
+margin:0;
 }
 
 h1{
-font-size:34px;
-font-weight:700;
-margin-bottom:20px;
 text-align:center;
+font-size:32px;
 }
 
 .card{
 background:white;
+padding:15px;
+margin-bottom:15px;
 border-radius:20px;
-padding:16px;
-margin-bottom:20px;
 box-shadow:0 2px 10px rgba(0,0,0,0.08);
 }
 
-input,
-textarea,
-select{
+input,select,textarea{
 width:100%;
-padding:12px;
+padding:14px;
 margin-bottom:10px;
 border:none;
-border-radius:12px;
 background:#f2f2f7;
+border-radius:12px;
 font-size:16px;
+box-sizing:border-box;
 }
 
 button{
@@ -54,19 +46,14 @@ border:none;
 border-radius:12px;
 background:#007AFF;
 color:white;
-font-size:17px;
-font-weight:600;
-margin-top:5px;
-}
-
-button:active{
-transform:scale(0.98);
+font-size:16px;
+font-weight:bold;
 }
 
 .item{
 background:white;
-border-radius:20px;
 padding:15px;
+border-radius:20px;
 margin-bottom:15px;
 box-shadow:0 2px 10px rgba(0,0,0,0.08);
 }
@@ -79,40 +66,37 @@ border-radius:15px;
 margin-bottom:10px;
 }
 
-.name{
-font-size:22px;
-font-weight:700;
-margin-bottom:8px;
-}
-
-.detail{
-color:#555;
-margin-bottom:5px;
-}
-
 .badge{
 display:inline-block;
+padding:6px 12px;
 background:#007AFF;
 color:white;
-padding:4px 10px;
 border-radius:20px;
 font-size:13px;
 margin-bottom:10px;
 }
 
-.deleteButton{
+.name{
+font-size:22px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.delete{
 background:#ff3b30;
 margin-top:10px;
 }
 
-.search{
-margin-bottom:20px;
+.favorite{
+background:#ffcc00;
+color:black;
+margin-bottom:10px;
 }
 
 @media (prefers-color-scheme: dark){
 
 body{
-background:#000;
+background:black;
 color:white;
 }
 
@@ -122,14 +106,10 @@ background:#1c1c1e;
 }
 
 input,
-textarea,
-select{
+select,
+textarea{
 background:#2c2c2e;
 color:white;
-}
-
-.detail{
-color:#cccccc;
 }
 }
 
@@ -140,13 +120,12 @@ color:#cccccc;
 
 <h1>🧺 Waschprogramme</h1>
 
-<div class="search card">
+<div class="card">
 
 <input
 id="suche"
-placeholder="🔍 Suche..."
-onkeyup="anzeigen()"
->
+placeholder="🔍 Suchen..."
+onkeyup="anzeigen()">
 
 </div>
 
@@ -154,42 +133,50 @@ onkeyup="anzeigen()"
 
 <input
 id="name"
-placeholder="Wäschestück"
->
+placeholder="Wäschestück">
 
 <select id="kategorie">
 
 <option>T-Shirts</option>
+<option>Hemden</option>
 <option>Hosen</option>
+<option>Jacken</option>
 <option>Pullover</option>
-<option>Bettwäsche</option>
-<option>Handtücher</option>
-<option>Sport</option>
 <option>Unterwäsche</option>
+<option>Socken</option>
+<option>Sportbekleidung</option>
+<option>Handtücher</option>
+<option>Bettwäsche</option>
 <option>Sonstiges</option>
 
 </select>
 
-<input
-id="programm"
-placeholder="Waschprogramm"
->
+<select id="programm" onchange="temperaturVorschlag()">
+
+<option>Baumwolle 60°C</option>
+<option>Baumwolle 40°C</option>
+<option>Pflegeleicht 40°C</option>
+<option>Pflegeleicht 30°C</option>
+<option>Feinwäsche</option>
+<option>Wolle</option>
+<option>Handwäsche</option>
+<option>Sportwäsche</option>
+
+</select>
 
 <input
 id="temperatur"
-placeholder="Temperatur"
->
+placeholder="Temperatur">
 
 <textarea
 id="hinweis"
-placeholder="Hinweis"
-></textarea>
+placeholder="Hinweise"></textarea>
 
 <input
 type="file"
 id="bild"
 accept="image/*"
->
+capture="environment">
 
 <button onclick="speichern()">
 Speichern
@@ -202,11 +189,59 @@ Speichern
 <script>
 
 let waescheListe =
-JSON.parse(
-localStorage.getItem("waescheListe")
-) || [];
+JSON.parse(localStorage.getItem("waescheListe")) || [];
 
+temperaturVorschlag();
 anzeigen();
+
+function temperaturVorschlag(){
+
+const programm =
+document.getElementById("programm").value;
+
+const temp =
+document.getElementById("temperatur");
+
+if(programm.includes("60"))
+temp.value="60°C";
+
+else if(programm.includes("40"))
+temp.value="40°C";
+
+else
+temp.value="30°C";
+}
+
+function getIcon(kategorie){
+
+switch(kategorie){
+
+case "T-Shirts":
+return "👕";
+
+case "Hemden":
+return "👔";
+
+case "Hosen":
+return "👖";
+
+case "Jacken":
+return "🧥";
+
+case "Sportbekleidung":
+return "🏃";
+
+case "Bettwäsche":
+return "🛏️";
+
+case "Handtücher":
+return "🛁";
+
+default:
+return "🧺";
+
+}
+}
 
 function speichern(){
 
@@ -215,8 +250,7 @@ document.getElementById("bild").files[0];
 
 if(file){
 
-const reader =
-new FileReader();
+const reader = new FileReader();
 
 reader.onload = function(e){
 
@@ -228,7 +262,8 @@ e.target.result
 
 reader.readAsDataURL(file);
 
-}else{
+}
+else{
 
 eintragSpeichern("");
 }
@@ -253,34 +288,59 @@ document.getElementById("temperatur").value,
 hinweis:
 document.getElementById("hinweis").value,
 
-bild:
-bild
+bild:bild,
+
+favorit:false
+
 };
 
 waescheListe.push(teil);
 
 localStorage.setItem(
 "waescheListe",
-JSON.stringify(
-waescheListe
-)
+JSON.stringify(waescheListe)
 );
 
 document.getElementById("name").value="";
-document.getElementById("programm").value="";
-document.getElementById("temperatur").value="";
 document.getElementById("hinweis").value="";
 document.getElementById("bild").value="";
 
 anzeigen();
 }
 
+function favorit(index){
+
+waescheListe[index].favorit =
+!waescheListe[index].favorit;
+
+localStorage.setItem(
+"waescheListe",
+JSON.stringify(waescheListe)
+);
+
+anzeigen();
+}
+
+function loeschen(index){
+
+if(confirm("Eintrag löschen?")){
+
+waescheListe.splice(index,1);
+
+localStorage.setItem(
+"waescheListe",
+JSON.stringify(waescheListe)
+);
+
+anzeigen();
+}
+}
+
 function anzeigen(){
 
 const suche =
 document.getElementById("suche")
-.value
-.toLowerCase();
+.value.toLowerCase();
 
 const liste =
 document.getElementById("liste");
@@ -288,8 +348,8 @@ document.getElementById("liste");
 liste.innerHTML="";
 
 waescheListe
-
-.filter(teil =>
+.sort((a,b)=>b.favorit-a.favorit)
+.filter(teil=>
 
 teil.name
 .toLowerCase()
@@ -297,13 +357,13 @@ teil.name
 
 ||
 
-teil.programm
+teil.kategorie
 .toLowerCase()
 .includes(suche)
 
 ||
 
-teil.kategorie
+teil.programm
 .toLowerCase()
 .includes(suche)
 
@@ -316,13 +376,9 @@ liste.innerHTML += `
 <div class="item">
 
 ${teil.bild ?
-
 `<img src="${teil.bild}">`
-
 :
-
 ''
-
 }
 
 <div class="badge">
@@ -330,56 +386,40 @@ ${teil.kategorie}
 </div>
 
 <div class="name">
+${getIcon(teil.kategorie)}
 ${teil.name}
 </div>
 
-<div class="detail">
-<b>Programm:</b>
-${teil.programm}
+<div>
+⭐ ${teil.favorit ? "Favorit" : ""}
 </div>
 
-<div class="detail">
-<b>Temperatur:</b>
-${teil.temperatur}
-</div>
-
-<div class="detail">
-<b>Hinweis:</b>
-${teil.hinweis}
-</div>
+<p><b>Programm:</b> ${teil.programm}</p>
+<p><b>Temperatur:</b> ${teil.temperatur}</p>
+<p><b>Hinweis:</b> ${teil.hinweis}</p>
 
 <button
-class="deleteButton"
+class="favorite"
+onclick="favorit(${index})">
+
+⭐ Favorit umschalten
+
+</button>
+
+<button
+class="delete"
 onclick="loeschen(${index})">
 
-Löschen
+🗑 Löschen
 
 </button>
 
 </div>
 
 `;
+
 });
-}
 
-function loeschen(index){
-
-if(confirm("Eintrag löschen?")){
-
-waescheListe.splice(
-index,
-1
-);
-
-localStorage.setItem(
-"waescheListe",
-JSON.stringify(
-waescheListe
-)
-);
-
-anzeigen();
-}
 }
 
 </script>
