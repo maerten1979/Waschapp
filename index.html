@@ -138,6 +138,14 @@ id="suche"
 placeholder="🔍 Suchen..."
 onkeyup="anzeigen()">
 
+<select id="filterBesitzer" onchange="anzeigen()">
+<option value="">👨‍👩‍👧‍👦 Alle Personen</option>
+<option value="Martin">👨 Martin</option>
+<option value="Verena">👩 Verena</option>
+<option value="Paula">👧 Paula</option>
+<option value="Marlen">👧 Marlen</option>
+</select>
+
 </div>
 
 <div class="card">
@@ -400,6 +408,9 @@ function anzeigen(){
 const suche =
 document.getElementById("suche")
 .value.toLowerCase();
+const filterBesitzer =
+document.getElementById("filterBesitzer")
+.value;
 
 const liste =
 document.getElementById("liste");
@@ -422,7 +433,12 @@ if(
 ){
 return;
 }
-
+if(
+filterBesitzer !== "" &&
+eintrag.besitzer !== filterBesitzer
+){
+return;
+}
 const index =
 daten.indexOf(eintrag);
 
