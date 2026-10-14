@@ -354,7 +354,25 @@ anzeigen();
 }
 
 }
+function getIcon(name){
 
+const text = name.toLowerCase();
+
+if(text.includes("t-shirt")) return "👕";
+if(text.includes("hemd")) return "👔";
+if(text.includes("jeans")) return "👖";
+if(text.includes("shorts")) return "🩳";
+if(text.includes("pullover")) return "🧥";
+if(text.includes("hoodie")) return "🧥";
+if(text.includes("jacke")) return "🧥";
+if(text.includes("socken")) return "🧦";
+if(text.includes("unterhose")) return "🩲";
+if(text.includes("handtuch")) return "🛁";
+if(text.includes("bettwäsche")) return "🛏️";
+
+return "🧺";
+
+}
 function anzeigen(){
 
 const suche =
@@ -400,7 +418,7 @@ ${eintrag.waescheart}
 </div>
 
 <div class="name">
-🧺 ${eintrag.name}
+${getIcon(eintrag.name)} ${eintrag.name}
 </div>
 
 <p><b>Bezeichnung:</b> ${eintrag.bezeichnung || "-"}</p>
@@ -409,7 +427,11 @@ ${eintrag.waescheart}
 
 <p><b>Wäscheart:</b> ${eintrag.waescheart}</p>
 
-<p><b>Trockner:</b> ${eintrag.trockner}</p>
+<p><b>Trockner:</b>
+${eintrag.trockner === "Trockner geeignet"
+? "✅🌬️ Trocknergeeignet"
+: "❌🌬️ Nicht trocknergeeignet"}
+</p>
 
 <p><b>Hinweis:</b> ${eintrag.hinweis}</p>
 
