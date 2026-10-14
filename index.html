@@ -9,10 +9,11 @@
 <style>
 
 body{
-font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-background:#f2f2f7;
-padding:15px;
-margin:0;
+font-family:Arial,sans-serif;
+background:#f2f2f2;
+max-width:800px;
+margin:auto;
+padding:20px;
 }
 
 h1{
@@ -22,110 +23,199 @@ text-align:center;
 .card{
 background:white;
 padding:15px;
+border-radius:10px;
 margin-bottom:15px;
-border-radius:20px;
-box-shadow:0 2px 10px rgba(0,0,0,0.08);
 }
 
-input,select,textarea{
+input,select,textarea,button{
 width:100%;
-padding:12px;
-margin-bottom:10px;
-border:none;
-border-radius:12px;
-background:#f2f2f7;
+padding:10px;
+margin:5px 0;
 box-sizing:border-box;
 }
 
 button{
-width:100%;
-padding:12px;
+background:#007AFF;
+color:white;
 border:none;
-border-radius:12px;
-font-size:16px;
-font-weight:bold;
-margin-top:5px;
 cursor:pointer;
 }
 
-.save{
-background:#007AFF;
-color:white;
+.listeEintrag{
+background:white;
+padding:15px;
+margin-bottom:10px;
+border-radius:10px;
 }
 
-.favorite{
-background:#ffcc00;
+.favorit{
+background:gold;
 color:black;
 }
 
-.delete{
-background:#ff3b30;
+.loeschen{
+background:red;
 color:white;
-}
-
-.item{
-background:white;
-padding:15px;
-border-radius:20px;
-margin-bottom:15px;
-box-shadow:0 2px 10px rgba(0,0,0,0.08);
-}
-
-.item img{
-width:100%;
-max-height:250px;
-object-fit:cover;
-border-radius:12px;
-margin-bottom:10px;
-}
-
-@media (prefers-color-scheme: dark){
-
-body{
-background:black;
-color:white;
-}
-
-.card,
-.item{
-background:#1c1c1e;
-}
-
-input,
-select,
-textarea{
-background:#2c2c2e;
-color:white;
-}
-
 }
 
 </style>
 </head>
-
 <body>
 
 <h1>🧺 Waschprogramme</h1>
 
 <div class="card">
 
-<input
-id="suche"
-placeholder="🔍 Suchen..."
-onkeyup="anzeigen()">
+<input id="suche" placeholder="Suche..." onkeyup="anzeigen()">
+
+<input id="name" placeholder="Wäschestück">
+
+<select id="programm">
+<option>Baumwolle 60°C</option>
+<option>Baumwolle 40°C</option>
+<option>Pflegeleicht 40°C</option>
+<option>Pflegeleicht 30°C</option>
+<option>Feinwäsche</option>
+<option>Wolle</option>
+</select>
+
+<textarea id="hinweis" placeholder="Hinweis"></textarea>
+
+<button onclick="speichern()">
+Speichern
+</button>
 
 </div>
 
-<div class="card">
+<div id="liste"></div>
 
-<input
-id="name"
-placeholder="Wäschestück">
+<script>
 
-<select id="kategorie">
-<option>T-Shirts</option>
-<option>Hemden</option>
-<option>Hosen</option>
-<option>Jacken</option>
-<option>Pullover</option>
-<option>
+let daten =
+JSON.parse(localStorage.getItem("waesche")) || [];
+
+anzeigen();
+
+function speichern(){
+
+const name =
+document.getElementById("name").value.trim();
+
+if(name===""){
+alert("Bitte Wäschestück eingeben");
+return;
+}
+
+daten.push({
+
+name:name,
+programm:document.getElementById("programm").value,
+hinweis:document.getElementById("hinweis").value,
+favorit:false
+
+});
+
+localStorage.setItem(
+"waesche",
+JSON.stringify(daten)
+);
+
+document.getElementById("name").value="";
+document.getElementById("hinweis").value="";
+
+anzeigen();
+
+}
+
+function favorit(index){
+
+daten[index].favorit =
+!daten[index].favorit;
+
+localStorage.setItem(
+"waesche",
+JSON.stringify(daten)
+);
+
+anzeigen();
+
+}
+
+function loeschen(index){
+
+if(confirm("Eintrag löschen?")){
+
+daten.splice(index,1);
+
+localStorage.setItem(
+"waesche",
+JSON.stringify(daten)
+);
+
+anzeigen();
+
+}
+
+}
+
+function anzeigen(){
+
+const suche =
+document.getElementById("suche")
+.value.toLowerCase();
+
+const liste =
+document.getElementById("liste");
+
+liste.innerHTML="";
+
+daten.forEach((eintrag,index)=>{
+
+if(
+!eintrag.name.toLowerCase().includes(suche)
+&&
+!eintrag.programm.toLowerCase().includes(suche)
+){
+return;
+}
+
+liste.innerHTML += `
+
+<div class="listeEintrag">
+
+<h3>${eintrag.name}</h3>
+
+<p><b>Programm:</b> ${eintrag.programm}</p>
+
+<p>${eintrag.hinweis}</p>
+
+<button
+class="favorit"
+onclick="favorit(${index})">
+
+${eintrag.favorit ? "⭐ Favorit" : "☆ Favorit"}
+
+</button>
+
+<br><br>
+
+<button
+class="loeschen"
+onclick="loeschen(${index})">
+
+🗑 Löschen
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
