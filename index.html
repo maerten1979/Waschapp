@@ -300,7 +300,9 @@ function eintragSpeichern(bild){
     }
 
     waescheListe.push(teil);
-
+    
+    alert("Anzahl Einträge: " + waescheListe.length);
+    
     localStorage.setItem(
         "waescheListe",
         JSON.stringify(waescheListe)
