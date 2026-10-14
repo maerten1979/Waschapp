@@ -193,6 +193,14 @@ placeholder="Wäschestück">
 <option>Rote Wäsche</option>
 <option>Wolle</option>
 </select>
+
+<select id="besitzer">
+<option>Martin</option>
+<option>Verena</option>
+<option>Paula</option>
+<option>Marlen</option>
+</select>
+
 <select id="trockner">
 <option>Trockner geeignet</option>
 <option>Trockner nicht geeignet</option>
@@ -259,6 +267,9 @@ document.getElementById("programm").value,
 waescheart:
 document.getElementById("waescheart").value,
 
+besitzer:
+document.getElementById("besitzer").value,
+
 trockner:
 document.getElementById("trockner").value,
 
@@ -321,6 +332,7 @@ document.getElementById("hinweis").value="";
 document.getElementById("bild").value="";
 document.getElementById("programm").selectedIndex=0;
 document.getElementById("waescheart").selectedIndex=0;
+document.getElementById("besitzer").selectedIndex=0;
 document.getElementById("trockner").selectedIndex=0;
 
 anzeigen();
@@ -425,6 +437,8 @@ ${getIcon(eintrag.name)} ${eintrag.name}
 </div>
 
 <p><b>Bezeichnung:</b> ${eintrag.bezeichnung || "-"}</p>
+
+<p><b>Besitzer:</b> 👤 ${eintrag.besitzer}</p>
 
 <p><b>Programm:</b> ${eintrag.programm}</p>
 
