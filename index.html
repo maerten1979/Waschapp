@@ -154,37 +154,33 @@ onkeyup="anzeigen()">
 id="bezeichnung"
 placeholder="Bezeichnung (z.B. Martins Lieblingshoodie)">
 
-<input
-id="name"
-list="waescheVorschlaege"
-placeholder="Wäschestück">
+<select id="name">
 
-<datalist id="waescheVorschlaege">
+<option value="">Wäschestück auswählen</option>
 
-<option value="T-Shirt">
-<option value="Hemd">
-<option value="Jeans">
-<option value="Shorts">
-<option value="Pullover">
-<option value="Hoodie">
-<option value="Jacke">
-<option value="Softshelljacke">
-<option value="Winterjacke">
-<option value="Unterhemd">
-<option value="Unterhose">
-<option value="Socken">
-<option value="Sportshirt">
-<option value="Sporthose">
-<option value="Handtuch">
-<option value="Geschirrtuch">
-<option value="Bettwäsche">
-<option value="Wolle">
+<option>T-Shirt</option>
+<option>Hemd</option>
+<option>Jeans</option>
+<option>Shorts</option>
+<option>Pullover</option>
+<option>Hoodie</option>
+<option>Jacke</option>
+<option>Softshelljacke</option>
+<option>Winterjacke</option>
+<option>Unterhemd</option>
+<option>Unterhose</option>
+<option>Socken</option>
+<option>Sportshirt</option>
+<option>Sporthose</option>
+<option>Handtuch</option>
+<option>Geschirrtuch</option>
+<option>Bettwäsche</option>
+<option>Wolle</option>
 
-</datalist>
+</select>
 
 <select id="programm">
-<option>Baumwolle 90°C <--</option>
-<option>Baumwolle 60°C <--</option>  
+<option>Baumwolle 90°C</option>
 <option>Baumwolle 60°C</option>
 <option>Baumwolle 40°C</option>
 <option>Pflegeleicht 40°C</option>
@@ -195,6 +191,7 @@ placeholder="Wäschestück">
 <option>Express</option>
 <option>Dunkel/Jeans</option>
 </select>
+
 <select id="waescheart">
 <option>Helle Wäsche</option>
 <option>Dunkle Wäsche</option>
@@ -217,8 +214,7 @@ placeholder="Wäschestück">
 <input
 type="file"
 id="bild"
-accept="image/*"
-capture="environment">
+accept="image/*">
 
 <textarea
 id="hinweis"
@@ -244,7 +240,7 @@ anzeigen();
 function speichern(){
 
 const name =
-document.getElementById("name").value.trim();
+document.getElementById("name").value;
 
 if(name===""){
 
@@ -342,7 +338,7 @@ JSON.stringify(daten)
 );
 
 document.getElementById("bezeichnung").value="";
-document.getElementById("name").value="";
+document.getElementById("name").selectedIndex=0;
 document.getElementById("hinweis").value="";
 document.getElementById("bild").value="";
 document.getElementById("programm").selectedIndex=0;
