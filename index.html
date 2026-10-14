@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Waschprogramme</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+background:#f2f2f7;
+padding:15px;
+}
+
+h1{
+font-size:34px;
+font-weight:700;
+margin-bottom:20px;
+text-align:center;
+}
+
+.card{
+background:white;
+border-radius:20px;
+padding:16px;
+margin-bottom:20px;
+box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+input,
+textarea,
+select{
+width:100%;
+padding:12px;
+margin-bottom:10px;
+border:none;
+border-radius:12px;
+background:#f2f2f7;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#007AFF;
+color:white;
+font-size:17px;
+font-weight:600;
+margin-top:5px;
+}
+
+button:active{
+transform:scale(0.98);
+}
+
+.item{
+background:white;
+border-radius:20px;
+padding:15px;
+margin-bottom:15px;
+box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.item img{
+width:100%;
+max-height:250px;
+object-fit:cover;
+border-radius:15px;
+margin-bottom:10px;
+}
+
+.name{
+font-size:22px;
+font-weight:700;
+margin-bottom:8px;
+}
+
+.detail{
+color:#555;
+margin-bottom:5px;
+}
+
+.badge{
+display:inline-block;
+background:#007AFF;
+color:white;
+padding:4px 10px;
+border-radius:20px;
+font-size:13px;
+margin-bottom:10px;
+}
+
+.deleteButton{
+background:#ff3b30;
+margin-top:10px;
+}
+
+.search{
+margin-bottom:20px;
+}
+
+@media (prefers-color-scheme: dark){
+
+body{
+background:#000;
+color:white;
+}
+
+.card,
+.item{
+background:#1c1c1e;
+}
+
+input,
+textarea,
+select{
+background:#2c2c2e;
+color:white;
+}
+
+.detail{
+color:#cccccc;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🧺 Waschprogramme</h1>
+
+<div class="search card">
+
+<input
+id="suche"
+placeholder="🔍 Suche..."
+onkeyup="anzeigen()"
+>
+
+</div>
+
+<div class="card">
+
+<input
+id="name"
+placeholder="Wäschestück"
+>
+
+<select id="kategorie">
+
+<option>T-Shirts</option>
+<option>Hosen</option>
+<option>Pullover</option>
+<option>Bettwäsche</option>
+<option>Handtücher</option>
+<option>Sport</option>
+<option>Unterwäsche</option>
+<option>Sonstiges</option>
+
+</select>
+
+<input
+id="programm"
+placeholder="Waschprogramm"
+>
+
+<input
+id="temperatur"
+placeholder="Temperatur"
+>
+
+<textarea
+id="hinweis"
+placeholder="Hinweis"
+></textarea>
+
+<input
+type="file"
+id="bild"
+accept="image/*"
+>
+
+<button onclick="speichern()">
+Speichern
+</button>
+
+</div>
+
+<div id="liste"></div>
+
+<script>
+
+let waescheListe =
+JSON.parse(
+localStorage.getItem("waescheListe")
+) || [];
+
+anzeigen();
+
+function speichern(){
+
+const file =
+document.getElementById("bild").files[0];
+
+if(file){
+
+const reader =
+new FileReader();
+
+reader.onload = function(e){
+
+eintragSpeichern(
+e.target.result
+);
+
+};
+
+reader.readAsDataURL(file);
+
+}else{
+
+eintragSpeichern("");
+}
+}
+
+function eintragSpeichern(bild){
+
+const teil = {
+
+name:
+document.getElementById("name").value,
+
+kategorie:
+document.getElementById("kategorie").value,
+
+programm:
+document.getElementById("programm").value,
+
+temperatur:
+document.getElementById("temperatur").value,
+
+hinweis:
+document.getElementById("hinweis").value,
+
+bild:
+bild
+};
+
+waescheListe.push(teil);
+
+localStorage.setItem(
+"waescheListe",
+JSON.stringify(
+waescheListe
+)
+);
+
+document.getElementById("name").value="";
+document.getElementById("programm").value="";
+document.getElementById("temperatur").value="";
+document.getElementById("hinweis").value="";
+document.getElementById("bild").value="";
+
+anzeigen();
+}
+
+function anzeigen(){
+
+const suche =
+document.getElementById("suche")
+.value
+.toLowerCase();
+
+const liste =
+document.getElementById("liste");
+
+liste.innerHTML="";
+
+waescheListe
+
+.filter(teil =>
+
+teil.name
+.toLowerCase()
+.includes(suche)
+
+||
+
+teil.programm
+.toLowerCase()
+.includes(suche)
+
+||
+
+teil.kategorie
+.toLowerCase()
+.includes(suche)
+
+)
+
+.forEach((teil,index)=>{
+
+liste.innerHTML += `
+
+<div class="item">
+
+${teil.bild ?
+
+`<img src="${teil.bild}">`
+
+:
+
+''
+
+}
+
+<div class="badge">
+${teil.kategorie}
+</div>
+
+<div class="name">
+${teil.name}
+</div>
+
+<div class="detail">
+<b>Programm:</b>
+${teil.programm}
+</div>
+
+<div class="detail">
+<b>Temperatur:</b>
+${teil.temperatur}
+</div>
+
+<div class="detail">
+<b>Hinweis:</b>
+${teil.hinweis}
+</div>
+
+<button
+class="deleteButton"
+onclick="loeschen(${index})">
+
+Löschen
+
+</button>
+
+</div>
+
+`;
+});
+}
+
+function loeschen(index){
+
+if(confirm("Eintrag löschen?")){
+
+waescheListe.splice(
+index,
+1
+);
+
+localStorage.setItem(
+"waescheListe",
+JSON.stringify(
+waescheListe
+)
+);
+
+anzeigen();
+}
+}
+
+</script>
+
+</body>
+</html>
