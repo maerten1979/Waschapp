@@ -2,132 +2,115 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Waschprogramme</title>
 
 <style>
 
 body{
-    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-    background:#f2f2f7;
-    margin:0;
-    padding:15px;
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+background:#f2f2f7;
+padding:15px;
+margin:0;
 }
 
 h1{
-    text-align:center;
+text-align:center;
+font-size:32px;
 }
 
 .card{
-    background:white;
-    border-radius:20px;
-    padding:15px;
-    margin-bottom:15px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:20px;
+box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+input,select,textarea{
+width:100%;
+padding:14px;
+margin-bottom:10px;
+border:none;
+background:#f2f2f7;
+border-radius:12px;
+font-size:16px;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#007AFF;
+color:white;
+font-size:16px;
+font-weight:bold;
+}
+
+.item{
+background:white;
+padding:15px;
+border-radius:20px;
+margin-bottom:15px;
+box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.item img{
+width:100%;
+max-height:250px;
+object-fit:cover;
+border-radius:15px;
+margin-bottom:10px;
+}
+
+.badge{
+display:inline-block;
+padding:6px 12px;
+background:#007AFF;
+color:white;
+border-radius:20px;
+font-size:13px;
+margin-bottom:10px;
+}
+
+.name{
+font-size:22px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.delete{
+background:#ff3b30;
+margin-top:10px;
+}
+
+.favorite{
+background:#ffcc00;
+color:black;
+margin-bottom:10px;
+}
+
+@media (prefers-color-scheme: dark){
+
+body{
+background:black;
+color:white;
+}
+
+.card,
+.item{
+background:#1c1c1e;
 }
 
 input,
 select,
 textarea{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:12px;
-    background:#f2f2f7;
-    margin-bottom:10px;
-    font-size:16px;
-    box-sizing:border-box;
+background:#2c2c2e;
+color:white;
 }
-
-button{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:12px;
-    font-size:16px;
-    font-weight:bold;
-    margin-top:5px;
-    cursor:pointer;
-}
-
-.save{
-    background:#007AFF;
-    color:white;
-}
-
-.favorite{
-    background:#ffcc00;
-    color:black;
-}
-
-.edit{
-    background:#34c759;
-    color:white;
-}
-
-.delete{
-    background:#ff3b30;
-    color:white;
-}
-
-.item{
-    background:white;
-    border-radius:20px;
-    padding:15px;
-    margin-bottom:15px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.08);
-}
-
-.item img{
-    width:100%;
-    max-height:250px;
-    object-fit:cover;
-    border-radius:12px;
-    margin-bottom:10px;
-}
-
-.badge{
-    display:inline-block;
-    background:#007AFF;
-    color:white;
-    padding:5px 12px;
-    border-radius:20px;
-    margin-bottom:10px;
-}
-
-.filter{
-    display:flex;
-    gap:5px;
-    overflow-x:auto;
-    margin-bottom:15px;
-}
-
-.filter button{
-    width:auto;
-    background:#007AFF;
-    color:white;
-    padding:8px 12px;
-}
-
-@media (prefers-color-scheme: dark){
-
-    body{
-        background:#000;
-        color:white;
-    }
-
-    .card,
-    .item{
-        background:#1c1c1e;
-    }
-
-    input,
-    select,
-    textarea{
-        background:#2c2c2e;
-        color:white;
-    }
 }
 
 </style>
@@ -141,18 +124,9 @@ button{
 
 <input
 id="suche"
-placeholder="🔍 Suche..."
+placeholder="🔍 Suchen..."
 onkeyup="anzeigen()">
 
-</div>
-
-<div class="filter">
-<button onclick="setFilter('')">Alle</button>
-<button onclick="setFilter('T-Shirts')">👕</button>
-<button onclick="setFilter('Hosen')">👖</button>
-<button onclick="setFilter('Jacken')">🧥</button>
-<button onclick="setFilter('Sport')">🏃</button>
-<button onclick="setFilter('Bettwäsche')">🛏️</button>
 </div>
 
 <div class="card">
@@ -164,44 +138,29 @@ placeholder="Wäschestück">
 <select id="kategorie">
 
 <option>T-Shirts</option>
+<option>Hemden</option>
 <option>Hosen</option>
 <option>Jacken</option>
 <option>Pullover</option>
 <option>Unterwäsche</option>
 <option>Socken</option>
-<option>Sport</option>
-<option>Bettwäsche</option>
+<option>Sportbekleidung</option>
 <option>Handtücher</option>
+<option>Bettwäsche</option>
 <option>Sonstiges</option>
 
 </select>
 
 <select id="programm" onchange="temperaturVorschlag()">
 
-<option>Baumwolle 90°C</option>
 <option>Baumwolle 60°C</option>
 <option>Baumwolle 40°C</option>
-
-<option>Pflegeleicht 60°C</option>
 <option>Pflegeleicht 40°C</option>
 <option>Pflegeleicht 30°C</option>
-
-<option>Feinwäsche 30°C</option>
-<option>Wolle 30°C</option>
-
+<option>Feinwäsche</option>
+<option>Wolle</option>
 <option>Handwäsche</option>
-
 <option>Sportwäsche</option>
-
-<option>Dunkle Wäsche</option>
-
-<option>Hemden</option>
-
-<option>Bettwäsche</option>
-
-<option>Eco 40-60</option>
-
-<option>Schnellwäsche 30°C</option>
 
 </select>
 
@@ -209,21 +168,9 @@ placeholder="Wäschestück">
 id="temperatur"
 placeholder="Temperatur">
 
-<select id="trockner">
-
-<option value="Ja">
-✅ Trocknergeeignet
-</option>
-
-<option value="Nein">
-❌ Nicht trocknergeeignet
-</option>
-
-</select>
-
 <textarea
 id="hinweis"
-placeholder="Hinweis"></textarea>
+placeholder="Hinweise"></textarea>
 
 <input
 type="file"
@@ -231,12 +178,8 @@ id="bild"
 accept="image/*"
 capture="environment">
 
-<button
-class="save"
-onclick="speichern()">
-
-💾 Speichern
-
+<button onclick="speichern()">
+Speichern
 </button>
 
 </div>
@@ -245,41 +188,59 @@ onclick="speichern()">
 
 <script>
 
-let filterKategorie = "";
-let bearbeitenIndex = -1;
-
 let waescheListe =
-JSON.parse(
-localStorage.getItem("waescheListe")
-) || [];
+JSON.parse(localStorage.getItem("waescheListe")) || [];
 
 temperaturVorschlag();
 anzeigen();
-
-function setFilter(kategorie){
-
-filterKategorie = kategorie;
-anzeigen();
-
-}
 
 function temperaturVorschlag(){
 
 const programm =
 document.getElementById("programm").value;
 
-if(programm.includes("90"))
-document.getElementById("temperatur").value = "90°C";
+const temp =
+document.getElementById("temperatur");
 
-else if(programm.includes("60"))
-document.getElementById("temperatur").value = "60°C";
+if(programm.includes("60"))
+temp.value="60°C";
 
 else if(programm.includes("40"))
-document.getElementById("temperatur").value = "40°C";
+temp.value="40°C";
 
 else
-document.getElementById("temperatur").value = "30°C";
+temp.value="30°C";
+}
 
+function getIcon(kategorie){
+
+switch(kategorie){
+
+case "T-Shirts":
+return "👕";
+
+case "Hemden":
+return "👔";
+
+case "Hosen":
+return "👖";
+
+case "Jacken":
+return "🧥";
+
+case "Sportbekleidung":
+return "🏃";
+
+case "Bettwäsche":
+return "🛏️";
+
+case "Handtücher":
+return "🛁";
+
+default:
+return "🧺";
+
+}
 }
 
 function speichern(){
@@ -293,7 +254,9 @@ const reader = new FileReader();
 
 reader.onload = function(e){
 
-eintragSpeichern(e.target.result);
+eintragSpeichern(
+e.target.result
+);
 
 };
 
@@ -303,72 +266,46 @@ reader.readAsDataURL(file);
 else{
 
 eintragSpeichern("");
-
 }
-
 }
 
 function eintragSpeichern(bild){
 
-const eintrag = {
+const teil = {
 
-name: document.getElementById("name").value,
-kategorie: document.getElementById("kategorie").value,
-programm: document.getElementById("programm").value,
-temperatur: document.getElementById("temperatur").value,
-trockner: document.getElementById("trockner").value,
-hinweis: document.getElementById("hinweis").value,
-bild: bild,
-favorit: false
+name:
+document.getElementById("name").value,
+
+kategorie:
+document.getElementById("kategorie").value,
+
+programm:
+document.getElementById("programm").value,
+
+temperatur:
+document.getElementById("temperatur").value,
+
+hinweis:
+document.getElementById("hinweis").value,
+
+bild:bild,
+
+favorit:false
 
 };
 
-if(bearbeitenIndex >= 0){
-
-eintrag.favorit =
-waescheListe[bearbeitenIndex].favorit;
-
-if(!bild){
-
-eintrag.bild =
-waescheListe[bearbeitenIndex].bild;
-
-}
-
-waescheListe[bearbeitenIndex] = eintrag;
-
-bearbeitenIndex = -1;
-
-}
-else{
-
-waescheListe.push(eintrag);
-
-}
-
-speichernStorage();
-
-document.getElementById("name").value = "";
-document.getElementById("hinweis").value = "";
-document.getElementById("bild").value = "";
-
-}
-
-name.value="";
-hinweis.value="";
-bild.value="";
-
-}
-
-function speichernStorage(){
+waescheListe.push(teil);
 
 localStorage.setItem(
 "waescheListe",
 JSON.stringify(waescheListe)
 );
 
-anzeigen();
+document.getElementById("name").value="";
+document.getElementById("hinweis").value="";
+document.getElementById("bild").value="";
 
+anzeigen();
 }
 
 function favorit(index){
@@ -376,29 +313,12 @@ function favorit(index){
 waescheListe[index].favorit =
 !waescheListe[index].favorit;
 
-speichernStorage();
+localStorage.setItem(
+"waescheListe",
+JSON.stringify(waescheListe)
+);
 
-}
-
-function bearbeiten(index){
-
-const teil =
-waescheListe[index];
-
-document.getElementById("name").value = teil.name;
-document.getElementById("kategorie").value = teil.kategorie;
-document.getElementById("programm").value = teil.programm;
-document.getElementById("temperatur").value = teil.temperatur;
-document.getElementById("trockner").value = teil.trockner;
-document.getElementById("hinweis").value = teil.hinweis;
-
-bearbeitenIndex = index;
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
+anzeigen();
 }
 
 function loeschen(index){
@@ -407,31 +327,20 @@ if(confirm("Eintrag löschen?")){
 
 waescheListe.splice(index,1);
 
-speichernStorage();
+localStorage.setItem(
+"waescheListe",
+JSON.stringify(waescheListe)
+);
 
+anzeigen();
 }
-
-}
-
-function getIcon(k){
-
-if(k==="T-Shirts") return "👕";
-if(k==="Hosen") return "👖";
-if(k==="Jacken") return "🧥";
-if(k==="Sport") return "🏃";
-if(k==="Bettwäsche") return "🛏️";
-if(k==="Handtücher") return "🛁";
-
-return "🧺";
-
 }
 
 function anzeigen(){
 
 const suche =
 document.getElementById("suche")
-.value
-.toLowerCase();
+.value.toLowerCase();
 
 const liste =
 document.getElementById("liste");
@@ -439,28 +348,26 @@ document.getElementById("liste");
 liste.innerHTML="";
 
 waescheListe
-
 .sort((a,b)=>b.favorit-a.favorit)
+.filter(teil=>
 
-.filter(item=>{
+teil.name
+.toLowerCase()
+.includes(suche)
 
-const passtSuche =
-
-item.name.toLowerCase().includes(suche)
 ||
-item.programm.toLowerCase().includes(suche)
+
+teil.kategorie
+.toLowerCase()
+.includes(suche)
+
 ||
-item.kategorie.toLowerCase().includes(suche);
 
-const passtKategorie =
+teil.programm
+.toLowerCase()
+.includes(suche)
 
-filterKategorie === ""
-||
-item.kategorie === filterKategorie;
-
-return passtSuche && passtKategorie;
-
-})
+)
 
 .forEach((teil,index)=>{
 
@@ -468,8 +375,7 @@ liste.innerHTML += `
 
 <div class="item">
 
-${teil.bild
-?
+${teil.bild ?
 `<img src="${teil.bild}">`
 :
 ''
@@ -479,40 +385,24 @@ ${teil.bild
 ${teil.kategorie}
 </div>
 
-<h2>
+<div class="name">
 ${getIcon(teil.kategorie)}
 ${teil.name}
-</h2>
+</div>
 
-<p><b>🧺 Programm:</b> ${teil.programm}</p>
+<div>
+⭐ ${teil.favorit ? "Favorit" : ""}
+</div>
 
-<p><b>🌡 Temperatur:</b> ${teil.temperatur}</p>
-
-<p><b>🌀 Trockner:</b>
-${teil.trockner === "Ja"
-? "✅ Trocknergeeignet"
-: "❌ Nicht trocknergeeignet"}
-</p>
-
-<p><b>📝 Hinweis:</b> ${teil.hinweis}</p>
-
-<p>
-${teil.favorit ? "⭐ Favorit" : ""}
-</p>
+<p><b>Programm:</b> ${teil.programm}</p>
+<p><b>Temperatur:</b> ${teil.temperatur}</p>
+<p><b>Hinweis:</b> ${teil.hinweis}</p>
 
 <button
 class="favorite"
 onclick="favorit(${index})">
 
-⭐ Favorit
-
-</button>
-
-<button
-class="edit"
-onclick="bearbeiten(${index})">
-
-✏️ Bearbeiten
+⭐ Favorit umschalten
 
 </button>
 
